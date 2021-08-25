@@ -11,6 +11,8 @@ public class DisplayInboundStub extends OpenCOMComponent implements IConnections
     public OCM_SingleReceptacle<IControllerOutboundStub> m_PSR_IControllerOutboundStub;
     public OCM_SingleReceptacle<IAlarmOutboundStub> m_PSR_IAlarmOutboundStub;
 
+    String monitoringComponent;
+
     public DisplayInboundStub(IUnknown binder) {
         super(binder);
 
@@ -29,11 +31,12 @@ public class DisplayInboundStub extends OpenCOMComponent implements IConnections
     }
 
     public int[] readData() {
+        monitoringComponent = m_PSR_IControllerOutboundStub.m_pIntf.getMonitoringComponent();
         return m_PSR_IControllerOutboundStub.m_pIntf.getReadings();
     }
 
     public String getMonitoringComponent() {
-        return m_PSR_IControllerOutboundStub.m_pIntf.getMonitoringComponent();
+        return monitoringComponent;
     }
 
     public void setAlarmMessage(String inboundMessage) {

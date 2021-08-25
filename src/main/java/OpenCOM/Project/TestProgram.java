@@ -66,10 +66,6 @@ public class TestProgram {
         pILife.startup(pIOCM);
 
         //Start Sensors and stubs
-        IUnknown pSensorComponentIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.SensorCaplet.SensorComponent.SensorComponent", "SensorComponent");
-        pILife =  (ILifeCycle) pSensorComponentIUnk.QueryInterface("OpenCOM.ILifeCycle");
-        pILife.startup(pIOCM);
-
         IUnknown pSensorInboundStubIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.SensorCaplet.NetworkStubs.SensorInboundStub", "SensorInboundStub");
         pILife =  (ILifeCycle) pSensorInboundStubIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
@@ -77,6 +73,17 @@ public class TestProgram {
         IUnknown pSensorOutboundStubIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.SensorCaplet.NetworkStubs.SensorOutboundStub", "SensorOutboundStub");
         pILife =  (ILifeCycle) pSensorOutboundStubIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
+
+        IUnknown pSensorComponentIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.SensorCaplet.SensorComponent.SensorComponent", "SensorComponent");
+        pILife =  (ILifeCycle) pSensorComponentIUnk.QueryInterface("OpenCOM.ILifeCycle");
+        pILife.startup(pIOCM);
+
+        for (int i=2; i<4; i++) {
+            pSensorComponentIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.SensorCaplet.SensorComponent.SensorComponent", "SensorComponent" + i);
+            pILife = (ILifeCycle) pSensorComponentIUnk.QueryInterface("OpenCOM.ILifeCycle");
+            pILife.startup(pIOCM);
+            long sensorOutboundFromSensor = runtime.connect(pSensorOutboundStubIUnk, pSensorComponentIUnk, "OpenCOM.Project.SensorCaplet.SensorComponent.ISensorOutput");
+        } //Only the last component is connecting?
 
 
         //Get display interface

@@ -50,7 +50,7 @@ public class ControllerOutboundStub extends OpenCOMComponent implements IConnect
         context[0] = new ContextRule("Status", monitoringComponentStatus);
 
         index = m_PSR_IMonitoringComponent.getContext(context);
-        index = 1;
+        //index = 0;
         if (index >= 0) {
             m_PSR_IMonitoringComponent.interfaceList.get(index);
         }
@@ -58,7 +58,7 @@ public class ControllerOutboundStub extends OpenCOMComponent implements IConnect
     }
 
     public int getFrequency() {
-        return m_PSR_IMonitoringComponent.interfaceList.get(index).getOutboundFrequency();
+        return m_PSR_IMonitoringComponent.interfaceList.get(1).getOutboundFrequency();
     }
 
     public int[] getReadings() {

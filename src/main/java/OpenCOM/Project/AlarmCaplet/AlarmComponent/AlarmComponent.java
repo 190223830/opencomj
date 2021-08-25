@@ -21,12 +21,8 @@ public class AlarmComponent extends OpenCOMComponent implements IConnections, IL
     public void soundAlarm() {
             Boolean alarmOn = m_PSR_IAlarmInboundStub.m_pIntf.alarmStatus();
             if (alarmOn) {
-                m_PSR_IAlarmOutboundStub.m_pIntf.sendMessage("WARNING: ANOMALY DETECTED");
+                m_PSR_IAlarmOutboundStub.m_pIntf.sendMessage("WARNING: ANOMALY DETECTED\n");
             }
-            else {
-                m_PSR_IAlarmOutboundStub.m_pIntf.sendMessage("Alarm: Inactive");
-            }
-
     }
 
     //IConnections Interface

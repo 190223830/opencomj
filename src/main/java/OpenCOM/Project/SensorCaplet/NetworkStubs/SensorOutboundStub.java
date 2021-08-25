@@ -7,22 +7,31 @@ import OpenCOM.Project.SensorCaplet.SensorComponent.ISensorComponent;
 public class SensorOutboundStub extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, ISensorOutboundStub {
 
     //Declare Receptacles
-    public OCM_SingleReceptacle<ISensorComponent> m_PSR_ISensorComponent;
+    public OCM_MultiReceptacle<ISensorComponent> m_PSR_ISensorComponent;
+    int index;
 
     public SensorOutboundStub(IUnknown binder) {
         super(binder);
 
         //Initiate receptacles
-        m_PSR_ISensorComponent = new OCM_SingleReceptacle<ISensorComponent>(ISensorComponent.class);
+        m_PSR_ISensorComponent = new OCM_MultiReceptacle<ISensorComponent>(ISensorComponent.class);
+        index = 0;
     }
 
     public static int[] readings;
 
     public int[] getOutboundReadings() {
-        m_PSR_ISensorComponent.m_pIntf.read();
+        //This needs to run through all of the sensors - Although how do i define all of the connections at runtime?
+        //readings = m_PSR_ISensorComponent.m_pIntf.read();
+        try {
+            m_PSR_ISensorComponent.interfaceList.get(index);
+        } catch (ArrayIndexOutOfBoundsException limit) {
+            index = 0;
+        }
+        readings = m_PSR_ISensorComponent.interfaceList.get(index).read();
+        index++;
         return readings;
     }
-    public void setInboundReadings(int[] inbound) { readings = inbound;}
 
 
 

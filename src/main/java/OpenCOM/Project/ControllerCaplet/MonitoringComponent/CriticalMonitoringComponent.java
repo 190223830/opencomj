@@ -6,7 +6,7 @@ import OpenCOM.Project.ControllerCaplet.SignalAnalyserComponent.ISignalAnalyserC
 
 public class CriticalMonitoringComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, IMonitoringComponent {
 
-    private String Status = "Critical";
+    private String Status;
 
     //Declare Receptacles
     public OCM_SingleReceptacle<ISignalAnalyserComponent> m_PSR_ISignalAnalyserComponent;

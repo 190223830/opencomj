@@ -20,10 +20,10 @@ public class AlarmInboundStub extends OpenCOMComponent implements IConnections, 
     }
 
     public Boolean alarmStatus() {
-        if(m_PSR_IControllerOutboundStub.m_pIntf.status() == "Normal") {
-            return false;
+        if(m_PSR_IControllerOutboundStub.m_pIntf.status() == "Critical") {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public void startAlarm() {

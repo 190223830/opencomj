@@ -9,7 +9,9 @@ public interface ISensorComponent extends IUnknown {
     however, for this demonstration, it is simply generating random numbers
     at the requested frequency.
      */
-    public void read();
+    public int[] read();
 
+    public void Wait(long seconds);
 
+    public void setSensorID(int ID);
 }

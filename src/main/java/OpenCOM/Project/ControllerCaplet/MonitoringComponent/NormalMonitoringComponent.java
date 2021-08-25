@@ -6,7 +6,7 @@ import OpenCOM.Project.ControllerCaplet.SignalAnalyserComponent.ISignalAnalyserC
 
 public class NormalMonitoringComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, IMonitoringComponent {
 
-    private String Status = "Normal";
+    private String Status;
 
     //Declare Receptacles
     public OCM_SingleReceptacle<ISignalAnalyserComponent> m_PSR_ISignalAnalyserComponent;

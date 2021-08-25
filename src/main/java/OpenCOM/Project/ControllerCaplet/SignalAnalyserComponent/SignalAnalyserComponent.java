@@ -16,7 +16,6 @@ public class SignalAnalyserComponent extends OpenCOMComponent implements IConnec
         super(binder);
 
         //Initiate receptacles
-        //m_PSR_IMonitoringComponent = new OCM_SingleReceptacle<IMonitoringComponent>(IMonitoringComponent.class);
         m_PSR_IControllerInboundStub = new OCM_SingleReceptacle<IControllerInboundStub>(IControllerInboundStub.class);
     }
 
@@ -25,20 +24,23 @@ public class SignalAnalyserComponent extends OpenCOMComponent implements IConnec
 
         try {
             data = m_PSR_IControllerInboundStub.m_pIntf.getReadings();
+
+            int sensorID = data[data.length-1]; //the sensor number is the last number sent by the sensor
+            for(int i=0; i<data.length-1; i++) {
+                if (data[i] > 20) {
+                    crisis = true;
+                    break;
+                }
+                else {
+                    crisis = false;
+                }
+            }
+
         } catch (NullPointerException nullPointerException) {
-            System.out.println(nullPointerException + " From SignalAnalyserComponent.determineCrisis() - cannot find data");
-            data = new int[]{0};
+            System.out.println("Establishing Sensor Connection...");
         }
-        int sensorID = data[data.length-1]; //the sensor number is the last number sent by the sensor
-        for(int i=0; i<data.length-1; i++) {
-            if (data[i] > 20) {
-                crisis = true;
-                break;
-            }
-            else {
-                crisis = false;
-            }
-        }
+
+
         return crisis;
     }
 

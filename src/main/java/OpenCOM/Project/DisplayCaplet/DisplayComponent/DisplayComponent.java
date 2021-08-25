@@ -5,7 +5,7 @@ import OpenCOM.Project.DisplayCaplet.NetworkStubs.*;
 
 public class DisplayComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IDisplayComponent {
 
-    public static String message = "Alarm: Inactive";
+    public static String message = "";
 
     //Declare Receptacles
     public OCM_SingleReceptacle<IDisplayInboundStub> m_PSR_IDisplayInboundStub;
@@ -14,37 +14,37 @@ public class DisplayComponent extends OpenCOMComponent implements IConnections, 
         super(binder);
 
         m_PSR_IDisplayInboundStub = new OCM_SingleReceptacle<IDisplayInboundStub>(IDisplayInboundStub.class);
-        Boolean alarmStatus;
-        String messages;
     }
 
 
     public void display(int[] reading) {
-        System.out.println("\n\n\n");
         String output = "Current status is: " + getStatus() + "\nReadings: ";
         for(int i=0; i<reading.length-1; i++) {
             output += reading[i] + " ";
         }
         System.out.println(output);
         System.out.println("ID: " + reading[reading.length-1]);
+
     }
 
     public void displayAlarmMessages() {
         System.out.println(message);
-        message = "Alarm: Inactive";
+        message = "";
     }
 
     public void reading() {
         int[] inputData;
         while(true) {
+
             if (m_PSR_IDisplayInboundStub.m_pIntf.newData()) ;
             {
                 inputData = m_PSR_IDisplayInboundStub.m_pIntf.readData();
                 try {
+                    displayAlarmMessages();
                     display(inputData);
                 } catch (NullPointerException nullPointerException) {}
             }
-            displayAlarmMessages();
+
             Wait(1);
         }
     }

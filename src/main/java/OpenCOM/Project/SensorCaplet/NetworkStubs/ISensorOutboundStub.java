@@ -9,9 +9,5 @@ public interface ISensorOutboundStub extends IUnknown {
      */
     public int[] getOutboundReadings();
 
-    /*
-    Stores readings from sensor.
-     */
-    public void setInboundReadings(int[] inbound);
 
 }
