@@ -1,21 +1,25 @@
 package OpenCOM.Project;
 
 import OpenCOM.*;
-import OpenCOM.Project.AlarmCaplet.AlarmComponent.IAlarmComponent;
 import OpenCOM.Project.DisplayCaplet.DisplayComponent.IDisplayComponent;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.io.*;
+import static java.lang.Integer.parseInt;
 
 
 public class TestProgram {
 
+    private static int sensors;
     public TestProgram() {
 
     }
 
     public static void main(String args[]) {
+
+        Scanner sensorReq = new Scanner(System.in);
+        System.out.println("Enter number of sensors: ");
+        sensors = parseInt(sensorReq.nextLine());
+
         OpenCOM runtime = new OpenCOM();
         IOpenCOM pIOCM = (IOpenCOM) runtime.QueryInterface("OpenCOM.IOpenCOM");
 
@@ -74,16 +78,16 @@ public class TestProgram {
         pILife =  (ILifeCycle) pSensorOutboundStubIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
-        IUnknown pSensorComponentIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.SensorCaplet.SensorComponent.SensorComponent", "SensorComponent");
-        pILife =  (ILifeCycle) pSensorComponentIUnk.QueryInterface("OpenCOM.ILifeCycle");
-        pILife.startup(pIOCM);
 
-        for (int i=2; i<4; i++) {
+        IUnknown pSensorComponentIUnk;
+        for (int i=1; i<=sensors; i++) {
             pSensorComponentIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.SensorCaplet.SensorComponent.SensorComponent", "SensorComponent" + i);
             pILife = (ILifeCycle) pSensorComponentIUnk.QueryInterface("OpenCOM.ILifeCycle");
             pILife.startup(pIOCM);
-            long sensorOutboundFromSensor = runtime.connect(pSensorOutboundStubIUnk, pSensorComponentIUnk, "OpenCOM.Project.SensorCaplet.SensorComponent.ISensorOutput");
-        } //Only the last component is connecting?
+            long sensorOutboundFromSensor = runtime.connect(pSensorOutboundStubIUnk, pSensorComponentIUnk, "OpenCOM.Project.SensorCaplet.SensorComponent.ISensorComponent");
+            long sensorFromSensorInbound = runtime.connect(pSensorComponentIUnk,pSensorInboundStubIUnk, "OpenCOM.Project.SensorCaplet.NetworkStubs.ISensorInboundStub");
+
+        }
 
 
         //Get display interface
@@ -112,10 +116,7 @@ public class TestProgram {
         long displayInboundFromControllerOutbound = runtime.connect(pDisplayInboundStubIUnk,pControllerOutboundStubIUnk, "OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerOutboundStub");
         long displayInboundFromAlarmOutbound = runtime.connect(pDisplayInboundStubIUnk, pAlarmOutboundStubIUnk, "OpenCOM.Project.AlarmCaplet.NetworkStubs.IAlarmOutboundStub");
         long sensorInboundFromControllerOutbound = runtime.connect(pSensorInboundStubIUnk,pControllerOutboundStubIUnk, "OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerOutboundStub");
-        long sensorOutboundFromSensor = runtime.connect(pSensorOutboundStubIUnk, pSensorComponentIUnk, "OpenCOM.Project.SensorCaplet.SensorComponent.ISensorComponent");
-        long sensorFromSensorInbound = runtime.connect(pSensorComponentIUnk,pSensorInboundStubIUnk, "OpenCOM.Project.SensorCaplet.NetworkStubs.ISensorInboundStub");
-        long sensorFromSensorOutbound = runtime.connect(pSensorComponentIUnk,pSensorOutboundStubIUnk, "OpenCOM.Project.SensorCaplet.NetworkStubs.ISensorOutboundStub");
-
+        long criticalMonitoringFromControllerInbound = runtime.connect(pCriticalMonitoringComponentIUnk,pControllerInboundStubIUnk, "OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub");
 
 
         //Debug info
@@ -123,7 +124,6 @@ public class TestProgram {
         pIDebug.dump();
 
         //Run Display and alarm
-        //pIAlarm.soundAlarm();
         pIDisplay.reading();
 
     }

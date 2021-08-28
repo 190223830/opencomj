@@ -24,8 +24,10 @@ public class NormalMonitoringComponent extends OpenCOMComponent implements IConn
     }
 
 
-    public int getOutboundFrequency() {
-        return 5;
+    public int[] getOutboundFrequency() {
+        int[] outboundData = new int[3];
+        outboundData[2] = 5;    // Sensor frequency
+        return outboundData;
     }
 
 

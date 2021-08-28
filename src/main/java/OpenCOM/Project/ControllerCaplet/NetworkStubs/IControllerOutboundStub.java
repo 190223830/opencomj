@@ -14,7 +14,7 @@ public interface IControllerOutboundStub extends IUnknown {
     /*
     Used for sending the required frequency to the sensors.
      */
-    public int getFrequency();
+    public int[] getFrequency();
 
 
     /*

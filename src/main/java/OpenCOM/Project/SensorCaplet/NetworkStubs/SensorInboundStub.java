@@ -17,7 +17,7 @@ public class SensorInboundStub extends OpenCOMComponent implements IConnections,
         m_PSR_IControllerOutboundStub = new OCM_SingleReceptacle<IControllerOutboundStub>(IControllerOutboundStub.class);
     }
 
-    public int getFrequency() {
+    public int[] getFrequency() {
         return m_PSR_IControllerOutboundStub.m_pIntf.getFrequency();
     }
 

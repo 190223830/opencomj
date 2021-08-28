@@ -1,13 +1,11 @@
 package OpenCOM.Project.ControllerCaplet.SignalAnalyserComponent;
 
 import OpenCOM.*;
-import OpenCOM.Project.ControllerCaplet.MonitoringComponent.*;
 import OpenCOM.Project.ControllerCaplet.NetworkStubs.*;
 
 public class SignalAnalyserComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, ISignalAnalyserComponent {
 
     //Declare Receptacles
-    //public OCM_SingleReceptacle<IMonitoringComponent> m_PSR_IMonitoringComponent;
     public OCM_SingleReceptacle<IControllerInboundStub> m_PSR_IControllerInboundStub;
 
     int[] data;
@@ -50,20 +48,14 @@ public class SignalAnalyserComponent extends OpenCOMComponent implements IConnec
 
     //IConnections Interface
     public boolean connect(IUnknown pSinkIntf, String riid, long provConnID) {
-        if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.MonitoringComponent.IMonitoringComponent")){
-        //    return m_PSR_IMonitoringComponent.connectToRecp(pSinkIntf, riid, provConnID);
-        }
-        else if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub")) {
+        if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub")) {
             return m_PSR_IControllerInboundStub.connectToRecp(pSinkIntf, riid, provConnID);
         }
         return false;
     }
 
     public boolean disconnect(String riid, long connID) {
-        if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.MonitoringComponent.IMonitoringComponent")){
-        //    return m_PSR_IMonitoringComponent.disconnectFromRecp(connID);
-        }
-        else if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub")) {
+        if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub")) {
             return m_PSR_IControllerInboundStub.disconnectFromRecp(connID);
         }
         return false;

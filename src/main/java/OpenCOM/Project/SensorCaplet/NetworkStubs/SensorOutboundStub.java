@@ -9,6 +9,7 @@ public class SensorOutboundStub extends OpenCOMComponent implements IConnections
     //Declare Receptacles
     public OCM_MultiReceptacle<ISensorComponent> m_PSR_ISensorComponent;
     int index;
+    Boolean IDSet;
 
     public SensorOutboundStub(IUnknown binder) {
         super(binder);
@@ -16,17 +17,22 @@ public class SensorOutboundStub extends OpenCOMComponent implements IConnections
         //Initiate receptacles
         m_PSR_ISensorComponent = new OCM_MultiReceptacle<ISensorComponent>(ISensorComponent.class);
         index = 0;
+        IDSet = false;
     }
 
     public static int[] readings;
 
     public int[] getOutboundReadings() {
-        //This needs to run through all of the sensors - Although how do i define all of the connections at runtime?
         //readings = m_PSR_ISensorComponent.m_pIntf.read();
+
         try {
             m_PSR_ISensorComponent.interfaceList.get(index);
+            if (IDSet == false) {
+                m_PSR_ISensorComponent.interfaceList.get(index).setSensorID(index+1);
+            }
         } catch (ArrayIndexOutOfBoundsException limit) {
             index = 0;
+            IDSet = true;
         }
         readings = m_PSR_ISensorComponent.interfaceList.get(index).read();
         index++;

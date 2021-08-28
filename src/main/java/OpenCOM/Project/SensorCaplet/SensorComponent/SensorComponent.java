@@ -8,7 +8,6 @@ public class SensorComponent extends OpenCOMComponent implements IConnections, I
 
     //Declare Receptacles
     public OCM_SingleReceptacle<ISensorInboundStub> m_PSR_ISensorInboundStub;
-    //public OCM_SingleReceptacle<ISensorOutboundStub> m_PSR_ISensorOutboundStub;
 
     public int sensorID;
 
@@ -17,20 +16,24 @@ public class SensorComponent extends OpenCOMComponent implements IConnections, I
 
         //Initiate receptacles
         m_PSR_ISensorInboundStub = new OCM_SingleReceptacle<ISensorInboundStub>(ISensorInboundStub.class);
-        //m_PSR_ISensorOutboundStub = new OCM_SingleReceptacle<ISensorOutboundStub>(ISensorOutboundStub.class);
 
         sensorID = 1;
     }
 
     public int[] read() {
-        int frequency = m_PSR_ISensorInboundStub.m_pIntf.getFrequency();
+        int frequency;
+        int[] frequencyData = m_PSR_ISensorInboundStub.m_pIntf.getFrequency();
+        if (frequencyData[0] == sensorID) {
+            frequency = frequencyData[1];
+        } else {
+            frequency = frequencyData[2];
+        }
         int[] readings = new int[frequency+1];
         for(int i=0; i<frequency; i++) {
             int reading = (int) (Math.random() * (22));    //generates a random number between 0 and 21
             readings[i] = reading;
         }
         readings[frequency] = sensorID;
-        //m_PSR_ISensorOutboundStub.m_pIntf.setInboundReadings(readings);
         Wait(1);
         return readings;
     }
@@ -55,9 +58,6 @@ public class SensorComponent extends OpenCOMComponent implements IConnections, I
         if(riid.toString().equalsIgnoreCase("OpenCOM.Project.SensorCaplet.NetworkStubs.ISensorInboundStub")){
             return m_PSR_ISensorInboundStub.connectToRecp(pSinkIntf, riid, provConnID);
         }
-        else if(riid.toString().equalsIgnoreCase("OpenCOM.Project.SensorCaplet.NetworkStubs.ISensorOutboundStub")){
-            //return m_PSR_ISensorOutboundStub.connectToRecp(pSinkIntf, riid, provConnID);
-        }
         return false;
     }
 
@@ -65,9 +65,6 @@ public class SensorComponent extends OpenCOMComponent implements IConnections, I
 
         if(riid.toString().equalsIgnoreCase("OpenCOM.Project.SensorCaplet.NetworkStubs.ISensorInboundStub")){
             return m_PSR_ISensorInboundStub.disconnectFromRecp(connID);
-        }
-        else if(riid.toString().equalsIgnoreCase("OpenCOM.Project.SensorCaplet.NetworkStubs.ISensorOutboundStub")){
-            //return m_PSR_ISensorOutboundStub.disconnectFromRecp(connID);
         }
         return false;
     }

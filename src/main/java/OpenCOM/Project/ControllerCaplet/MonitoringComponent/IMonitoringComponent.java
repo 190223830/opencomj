@@ -7,7 +7,7 @@ public interface IMonitoringComponent extends IUnknown {
     /*
     Send appropriate frequency depending on whether there is a crisis or not.
      */
-    public int getOutboundFrequency();
+    public int[] getOutboundFrequency();
 
 
 

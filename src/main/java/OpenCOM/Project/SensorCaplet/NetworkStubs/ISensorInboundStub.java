@@ -7,7 +7,7 @@ public interface ISensorInboundStub extends IUnknown {
     /*
     Gets requested frequency from the controller.
      */
-    public int getFrequency();
+    public int[] getFrequency();
 
 
 }
