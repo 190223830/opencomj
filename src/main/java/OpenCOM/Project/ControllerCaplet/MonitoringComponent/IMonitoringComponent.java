@@ -10,5 +10,6 @@ public interface IMonitoringComponent extends IUnknown {
     public int[] getOutboundFrequency();
 
 
+    public void setSensorID(Boolean crit);
 
 }

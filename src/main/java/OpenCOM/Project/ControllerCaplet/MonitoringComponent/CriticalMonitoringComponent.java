@@ -9,6 +9,7 @@ public class CriticalMonitoringComponent extends OpenCOMComponent implements ICo
 
     private String Status;
     public int sensorID;
+    public Boolean set;
 
     //Declare Receptacles
     public OCM_SingleReceptacle<ISignalAnalyserComponent> m_PSR_ISignalAnalyserComponent;
@@ -17,19 +18,24 @@ public class CriticalMonitoringComponent extends OpenCOMComponent implements ICo
 
     public CriticalMonitoringComponent(IUnknown pRuntime) {
         super(pRuntime);
+        sensorID = 0;
+        set = false;
 
         Status = "Critical";
-
         m_PSR_ISignalAnalyserComponent = new OCM_SingleReceptacle<ISignalAnalyserComponent>(ISignalAnalyserComponent.class);
         m_PSR_IControllerOutboundStub = new OCM_SingleReceptacle<IControllerOutboundStub>(IControllerOutboundStub.class);
         m_PSR_IControllerInboundStub = new OCM_SingleReceptacle<IControllerInboundStub>(IControllerInboundStub.class);
 
     }
 
-    public int getCriticalSensorID() {
-        int[] data = m_PSR_IControllerInboundStub.m_pIntf.getReadings();
-        sensorID = data[data.length-1];
-        return sensorID;
+    public void setSensorID(Boolean crit) {
+        if (crit == true && set == false) {
+            int[] readings = m_PSR_IControllerOutboundStub.m_pIntf.getReadings();
+            sensorID = readings[readings.length - 1];
+            set = true;
+        } else if (crit == false) {
+            set = false;
+        }
     }
 
     public int[] getOutboundFrequency() {

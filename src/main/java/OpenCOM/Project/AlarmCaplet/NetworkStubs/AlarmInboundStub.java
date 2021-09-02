@@ -10,8 +10,12 @@ public class AlarmInboundStub extends OpenCOMComponent implements IConnections, 
     public OCM_SingleReceptacle<IControllerOutboundStub> m_PSR_IControllerOutboundStub;
     public OCM_SingleReceptacle<IAlarmComponent> m_PSR_IAlarmComponent;
 
+    Boolean alarmSounded;
+
     public AlarmInboundStub(IUnknown binder) {
         super(binder);
+
+        alarmSounded = false;
 
         //Initiate receptacles
         m_PSR_IControllerOutboundStub = new OCM_SingleReceptacle<IControllerOutboundStub>(IControllerOutboundStub.class);
@@ -20,7 +24,11 @@ public class AlarmInboundStub extends OpenCOMComponent implements IConnections, 
     }
 
     public Boolean alarmStatus() {
-        if(m_PSR_IControllerOutboundStub.m_pIntf.status() == "Critical") {
+        if(m_PSR_IControllerOutboundStub.m_pIntf.status() == "Normal") {
+            alarmSounded = false;
+        }
+        else if(m_PSR_IControllerOutboundStub.m_pIntf.status() == "Critical" && alarmSounded == false) {
+            alarmSounded = true;
             return true;
         }
         return false;

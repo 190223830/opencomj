@@ -8,7 +8,6 @@ public class SensorInboundStub extends OpenCOMComponent implements IConnections,
 
     //Declare Receptacles
     public OCM_SingleReceptacle<IControllerOutboundStub> m_PSR_IControllerOutboundStub;
-    // Should I reference the caplet or the inbound stub component of that caplet?
 
     public SensorInboundStub(IUnknown binder) {
         super(binder);

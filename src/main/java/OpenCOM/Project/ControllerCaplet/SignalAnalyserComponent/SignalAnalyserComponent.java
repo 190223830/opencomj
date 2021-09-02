@@ -9,6 +9,7 @@ public class SignalAnalyserComponent extends OpenCOMComponent implements IConnec
     public OCM_SingleReceptacle<IControllerInboundStub> m_PSR_IControllerInboundStub;
 
     int[] data;
+    int crisisID;
 
     public SignalAnalyserComponent(IUnknown binder) {
         super(binder);
@@ -26,11 +27,17 @@ public class SignalAnalyserComponent extends OpenCOMComponent implements IConnec
             int sensorID = data[data.length-1]; //the sensor number is the last number sent by the sensor
             for(int i=0; i<data.length-1; i++) {
                 if (data[i] > 20) {
+                    crisisID = sensorID;
                     crisis = true;
                     break;
                 }
                 else {
-                    crisis = false;
+                    if (sensorID == crisisID || crisisID == 0) {
+                        crisis = false;
+                        crisisID = 0;
+                    } else {
+                        crisis = true;
+                    }
                 }
             }
 

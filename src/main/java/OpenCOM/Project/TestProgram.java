@@ -38,11 +38,11 @@ public class TestProgram {
 
         //Start Monitoring Component
         IUnknown pNormalMonitoringComponentIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.ControllerCaplet.MonitoringComponent.NormalMonitoringComponent", "NormalMonitoringComponent");
-        pILife =  (ILifeCycle) pAlarmOutboundStubIUnk.QueryInterface("OpenCOM.ILifeCycle");
+        pILife =  (ILifeCycle) pNormalMonitoringComponentIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
         IUnknown pCriticalMonitoringComponentIUnk = (IUnknown) pIOCM.createInstance("OpenCOM.Project.ControllerCaplet.MonitoringComponent.CriticalMonitoringComponent", "CriticalMonitoringComponent");
-        pILife =  (ILifeCycle) pAlarmOutboundStubIUnk.QueryInterface("OpenCOM.ILifeCycle");
+        pILife =  (ILifeCycle) pCriticalMonitoringComponentIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
 
@@ -117,13 +117,19 @@ public class TestProgram {
         long displayInboundFromAlarmOutbound = runtime.connect(pDisplayInboundStubIUnk, pAlarmOutboundStubIUnk, "OpenCOM.Project.AlarmCaplet.NetworkStubs.IAlarmOutboundStub");
         long sensorInboundFromControllerOutbound = runtime.connect(pSensorInboundStubIUnk,pControllerOutboundStubIUnk, "OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerOutboundStub");
         long criticalMonitoringFromControllerInbound = runtime.connect(pCriticalMonitoringComponentIUnk,pControllerInboundStubIUnk, "OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub");
+        long normalMonitoringFromControllerInbound = runtime.connect(pNormalMonitoringComponentIUnk,pControllerInboundStubIUnk, "OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub");
+
 
 
         //Debug info
         IDebug pIDebug =  (IDebug) runtime.QueryInterface("OpenCOM.IDebug");
-        pIDebug.dump();
+        try {
+            pIDebug.visualise();
+        } catch (NullPointerException nullPointerException) {
+            pIDebug.dump();
+        }
 
-        //Run Display and alarm
+        //Run Display
         pIDisplay.reading();
 
     }

@@ -21,13 +21,13 @@ public class SensorComponent extends OpenCOMComponent implements IConnections, I
     }
 
     public int[] read() {
-        int frequency;
+        int frequency = 5;
         int[] frequencyData = m_PSR_ISensorInboundStub.m_pIntf.getFrequency();
-        if (frequencyData[0] == sensorID) {
-            frequency = frequencyData[1];
-        } else {
-            frequency = frequencyData[2];
-        }
+            if (frequencyData[0] == sensorID) {
+                frequency = frequencyData[1];
+            } else {
+                frequency = frequencyData[2];
+            }
         int[] readings = new int[frequency+1];
         for(int i=0; i<frequency; i++) {
             int reading = (int) (Math.random() * (22));    //generates a random number between 0 and 21
