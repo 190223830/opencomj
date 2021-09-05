@@ -4,7 +4,7 @@ import OpenCOM.*;
 import OpenCOM.Project.SensorCaplet.NetworkStubs.*;
 
 
-public class SensorComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, ISensorComponent, ISensorOutput {
+public class SensorComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, ISensorComponent {
 
     //Declare Receptacles
     public OCM_SingleReceptacle<ISensorInboundStub> m_PSR_ISensorInboundStub;

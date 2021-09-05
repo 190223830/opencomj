@@ -2,7 +2,6 @@ package OpenCOM.Project;
 
 import OpenCOM.*;
 import OpenCOM.Project.DisplayCaplet.DisplayComponent.IDisplayComponent;
-
 import java.util.*;
 import static java.lang.Integer.parseInt;
 
@@ -10,17 +9,26 @@ import static java.lang.Integer.parseInt;
 public class TestProgram {
 
     private static int sensors;
-    public TestProgram() {
+    private static Boolean debug;
 
-    }
 
     public static void main(String args[]) {
 
-        Scanner sensorReq = new Scanner(System.in);
         System.out.println("Enter number of sensors: ");
+        Scanner sensorReq = new Scanner(System.in);
         sensors = parseInt(sensorReq.nextLine());
 
+        System.out.println("Show connection info? (y/n)");
+        Scanner showDebug = new Scanner(System.in);
+        if (showDebug.nextLine().contains("y")) {
+            debug = true;
+        } else {
+            debug = false;
+        }
+
+
         OpenCOM runtime = new OpenCOM();
+        runtime = new OpenCOM();
         IOpenCOM pIOCM = (IOpenCOM) runtime.QueryInterface("OpenCOM.IOpenCOM");
 
         //Start Alarm Component and stubs
@@ -122,15 +130,18 @@ public class TestProgram {
 
 
         //Debug info
-        IDebug pIDebug =  (IDebug) runtime.QueryInterface("OpenCOM.IDebug");
-        try {
-            pIDebug.visualise();
-        } catch (NullPointerException nullPointerException) {
-            pIDebug.dump();
+        if (debug) {
+            IDebug pIDebug =  (IDebug) runtime.QueryInterface("OpenCOM.IDebug");
+            try {
+                pIDebug.visualise();
+            } catch (NullPointerException nullPointerException) {
+                pIDebug.dump();
+            }
         }
 
+        // Temporary - run malicious code, passing it the runtime.
+        Malicious.main(runtime);
         //Run Display
         pIDisplay.reading();
-
     }
 }

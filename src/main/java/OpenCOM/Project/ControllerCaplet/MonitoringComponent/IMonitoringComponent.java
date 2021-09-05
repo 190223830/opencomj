@@ -10,6 +10,9 @@ public interface IMonitoringComponent extends IUnknown {
     public int[] getOutboundFrequency();
 
 
+    /*
+    Finds and stores the ID of the sensor that gives a critical reading.
+     */
     public void setSensorID(Boolean crit);
 
 }

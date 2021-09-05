@@ -11,7 +11,13 @@ public interface ISensorComponent extends IUnknown {
      */
     public int[] read();
 
+    /*
+    Freezes the program for a given number of seconds.
+     */
     public void Wait(long seconds);
 
+    /*
+    Used at the start to assign a sensor ID to the given instance of the sensor.
+     */
     public void setSensorID(int ID);
 }

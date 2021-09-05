@@ -1,43 +1,49 @@
-package OpenCOM.Project.ControllerCaplet.MonitoringComponent;
+package OpenCOM.Project;
 
 import OpenCOM.*;
+import OpenCOM.Project.ControllerCaplet.MonitoringComponent.IMonitoringComponent;
 import OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub;
 import OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerOutboundStub;
 import OpenCOM.Project.ControllerCaplet.SignalAnalyserComponent.ISignalAnalyserComponent;
 
-import java.lang.reflect.UndeclaredThrowableException;
-
-public class NormalMonitoringComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, IMonitoringComponent {
+public class MaliciousMonitoringComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, IMonitoringComponent {
 
     private String Status;
     public int sensorID;
+    public Boolean set;
 
     //Declare Receptacles
     public OCM_SingleReceptacle<ISignalAnalyserComponent> m_PSR_ISignalAnalyserComponent;
     public OCM_SingleReceptacle<IControllerOutboundStub> m_PSR_IControllerOutboundStub;
     public OCM_SingleReceptacle<IControllerInboundStub> m_PSR_IControllerInboundStub;
 
-
-    public NormalMonitoringComponent(IUnknown pRuntime) {
+    public MaliciousMonitoringComponent(IUnknown pRuntime) {
         super(pRuntime);
         sensorID = 0;
-        Status = "Normal";
+        set = false;
 
+        Status = "Critical";
         m_PSR_ISignalAnalyserComponent = new OCM_SingleReceptacle<ISignalAnalyserComponent>(ISignalAnalyserComponent.class);
         m_PSR_IControllerOutboundStub = new OCM_SingleReceptacle<IControllerOutboundStub>(IControllerOutboundStub.class);
         m_PSR_IControllerInboundStub = new OCM_SingleReceptacle<IControllerInboundStub>(IControllerInboundStub.class);
+
     }
 
-
     public void setSensorID(Boolean crit) {
-        sensorID = 0;   //  Not needed as frequency does not depend on ID
+        if (crit == true && set == false) {
+            int[] readings = m_PSR_IControllerOutboundStub.m_pIntf.getReadings();
+            sensorID = readings[readings.length - 1];
+            set = true;
+        } else if (crit == false) {
+            set = false;
+        }
     }
 
     public int[] getOutboundFrequency() {
         int[] outboundData = new int[3];
-        outboundData[0] = 0;
-        outboundData[1] = 0;
-        outboundData[2] = 5;    // Sensor frequency
+        outboundData[0] = sensorID; // ID of critical sensor
+        outboundData[1] = 999;   // Critical sensor new frequency
+        outboundData[2] = 999;    // Other sensors frequency
         return outboundData;
     }
 
