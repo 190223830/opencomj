@@ -18,6 +18,7 @@ public class SensorComponent extends OpenCOMComponent implements IConnections, I
         m_PSR_ISensorInboundStub = new OCM_SingleReceptacle<ISensorInboundStub>(ISensorInboundStub.class);
 
         sensorID = 1;
+
     }
 
     public int[] read() {
@@ -30,7 +31,7 @@ public class SensorComponent extends OpenCOMComponent implements IConnections, I
             }
         int[] readings = new int[frequency+1];
         for(int i=0; i<frequency; i++) {
-            int reading = (int) (Math.random() * (22));    //generates a random number between 0 and 21
+            int reading = (int) (Math.random() * (52));    //generates a random number between 0 and 51
             readings[i] = reading;
         }
         readings[frequency] = sensorID;

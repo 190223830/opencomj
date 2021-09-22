@@ -26,7 +26,7 @@ public class SignalAnalyserComponent extends OpenCOMComponent implements IConnec
 
             int sensorID = data[data.length-1]; //the sensor number is the last number sent by the sensor
             for(int i=0; i<data.length-1; i++) {
-                if (data[i] > 20) {
+                if (data[i] > 50) {
                     crisisID = sensorID;
                     crisis = true;
                     break;

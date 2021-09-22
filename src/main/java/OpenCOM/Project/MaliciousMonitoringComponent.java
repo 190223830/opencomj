@@ -2,15 +2,12 @@ package OpenCOM.Project;
 
 import OpenCOM.*;
 import OpenCOM.Project.ControllerCaplet.MonitoringComponent.IMonitoringComponent;
-import OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub;
-import OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerOutboundStub;
+import OpenCOM.Project.ControllerCaplet.NetworkStubs.*;
 import OpenCOM.Project.ControllerCaplet.SignalAnalyserComponent.ISignalAnalyserComponent;
 
 public class MaliciousMonitoringComponent extends OpenCOMComponent implements IConnections, ILifeCycle, IUnknown, IMetaInterface, IMonitoringComponent {
 
     private String Status;
-    public int sensorID;
-    public Boolean set;
 
     //Declare Receptacles
     public OCM_SingleReceptacle<ISignalAnalyserComponent> m_PSR_ISignalAnalyserComponent;
@@ -19,8 +16,6 @@ public class MaliciousMonitoringComponent extends OpenCOMComponent implements IC
 
     public MaliciousMonitoringComponent(IUnknown pRuntime) {
         super(pRuntime);
-        sensorID = 0;
-        set = false;
 
         Status = "Critical";
         m_PSR_ISignalAnalyserComponent = new OCM_SingleReceptacle<ISignalAnalyserComponent>(ISignalAnalyserComponent.class);
@@ -30,20 +25,13 @@ public class MaliciousMonitoringComponent extends OpenCOMComponent implements IC
     }
 
     public void setSensorID(Boolean crit) {
-        if (crit == true && set == false) {
-            int[] readings = m_PSR_IControllerOutboundStub.m_pIntf.getReadings();
-            sensorID = readings[readings.length - 1];
-            set = true;
-        } else if (crit == false) {
-            set = false;
-        }
     }
 
     public int[] getOutboundFrequency() {
         int[] outboundData = new int[3];
-        outboundData[0] = sensorID; // ID of critical sensor
-        outboundData[1] = 999;   // Critical sensor new frequency
-        outboundData[2] = 999;    // Other sensors frequency
+        outboundData[0] = 1000000;   // ID of critical sensor
+        outboundData[1] = 1000000;   // Critical sensor new frequency
+        outboundData[2] = 1000000;   // Other sensors frequency
         return outboundData;
     }
 
@@ -63,17 +51,7 @@ public class MaliciousMonitoringComponent extends OpenCOMComponent implements IC
     }
 
     public boolean disconnect(String riid, long connID) {
-
-        if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.SignalAnalyserComponent.ISignalAnalyserComponent")){
-            return m_PSR_ISignalAnalyserComponent.disconnectFromRecp(connID);
-        }
-        else if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerOutboundStub")){
-            return m_PSR_IControllerOutboundStub.disconnectFromRecp(connID);
-        }
-        else if(riid.toString().equalsIgnoreCase("OpenCOM.Project.ControllerCaplet.NetworkStubs.IControllerInboundStub")){
-            return m_PSR_IControllerInboundStub.disconnectFromRecp(connID);
-        }
-        return false;
+        return true;
     }
 
     // ILifeCycle Interface
@@ -84,7 +62,5 @@ public class MaliciousMonitoringComponent extends OpenCOMComponent implements IC
     public boolean shutdown() {
         return true;
     }
-
-
 
 }

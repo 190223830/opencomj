@@ -10,7 +10,7 @@ public class Malicious {
 
     public static void main(OpenCOM runtime) {
         try {
-            //OpenCOM runtime;
+            //OpenCOM runtime = TestProgram.getRuntime();
             //runtime = TestProgram.runtime;
             IOpenCOM pIOCM = (IOpenCOM) runtime.QueryInterface("OpenCOM.IOpenCOM");
             //IOpenCOM pIOCM = TestProgram.pIOCM;

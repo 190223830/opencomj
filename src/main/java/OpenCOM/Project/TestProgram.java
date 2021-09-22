@@ -2,6 +2,9 @@ package OpenCOM.Project;
 
 import OpenCOM.*;
 import OpenCOM.Project.DisplayCaplet.DisplayComponent.IDisplayComponent;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import static java.lang.Integer.parseInt;
 
@@ -9,7 +12,8 @@ import static java.lang.Integer.parseInt;
 public class TestProgram {
 
     private static int sensors;
-    private static Boolean debug;
+    private static Boolean debug, showHashes;
+    public static OpenCOM runtime;
 
 
     public static void main(String args[]) {
@@ -26,8 +30,16 @@ public class TestProgram {
             debug = false;
         }
 
+        System.out.println("Show hash info? (y/n)");
+        Scanner showHash = new Scanner(System.in);
+        if (showDebug.nextLine().contains("y")) {
+            showHashes = true;
+        } else {
+            showHashes = false;
+        }
 
-        OpenCOM runtime = new OpenCOM();
+
+
         runtime = new OpenCOM();
         IOpenCOM pIOCM = (IOpenCOM) runtime.QueryInterface("OpenCOM.IOpenCOM");
 
@@ -138,10 +150,41 @@ public class TestProgram {
                 pIDebug.dump();
             }
         }
+        List<String> fileChecksums = null;
+        Boolean hashCheck;
+        try {
+            fileChecksums = GenerateChecksum.checksumForAllFiles();
+            hashCheck = true;
 
-        // Temporary - run malicious code, passing it the runtime.
-        Malicious.main(runtime);
+        } catch(NoSuchAlgorithmException | IOException error) {
+            System.out.println("Checksums failed, running without security...\n");
+            hashCheck = false;
+        }
+        if (showHashes) {
+            GenerateChecksum.printHashes();
+        }
+
+        List<String> finalFileChecksums = fileChecksums;
+        Boolean finalHashCheck = hashCheck;
+
+        new Thread(() -> {
+            try {
+                FileTreeCheck.start(finalFileChecksums, finalHashCheck);
+            } catch (NoSuchAlgorithmException | IOException e) {
+                System.out.println("Checksums failed, running without security...\n");
+            }
+        }).start();
         //Run Display
         pIDisplay.reading();
+
+        // Temporary - run malicious code, passing it the runtime.
+        //Malicious.main(runtime);
+
     }
+
+    //public static OpenCOM getRuntime() {
+    //    return runtime;
+    //}
 }
+
+
